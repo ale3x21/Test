@@ -138,7 +138,6 @@ namespace UniversalGankAlerter
 
         private void SliderRadiusValueChanged(object sender, Slider.ValueChangeArgs e)
         {
-            Chat.Print("Slider change to " + e.NewValue);
             _previewCircle.SetRadius(e.NewValue);
         }
 
