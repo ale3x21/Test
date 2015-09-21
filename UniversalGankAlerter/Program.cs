@@ -128,7 +128,7 @@ namespace UniversalGankAlerter
                     else
                     {
                         _championInfoById[hero.NetworkId] = new ChampionInfo(hero, true);
-                        _enemies.Add<CheckBox>("ally" + hero.ChampionName, new CheckBox(hero.ChampionName,false));
+                        _allies.Add<CheckBox>("ally" + hero.ChampionName, new CheckBox(hero.ChampionName,false));
                     }
                 }
             }
