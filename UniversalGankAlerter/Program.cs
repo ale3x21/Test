@@ -166,7 +166,7 @@ namespace UniversalGankAlerter
 
         public PreviewCircle()
         {
-            Drawing.OnDraw += Drawing_OnEndScene;
+            Drawing.OnEndScene += Drawing_OnEndScene;
             //_mapCircle = new Circle(ObjectManager.Player, 0, System.Drawing.Color.Red, 5);
             //_mapCircle.Add(0);
             //_mapCircle.VisibleCondition = sender => _lastChanged > 0 && Game.Time - _lastChanged < Delay;
@@ -174,10 +174,12 @@ namespace UniversalGankAlerter
 
         private void Drawing_OnEndScene(EventArgs args)
         {
-            //Chat.Print("before if " + _lastChanged);
+           //Chat.Print("before if " + _lastChanged);
             if (_lastChanged > 0 && Game.Time - _lastChanged < Delay)
             {
                 Drawing.DrawCircle(Player.Instance.Position, _radius, System.Drawing.Color.Red);
+                //Drawing.DrawCircle(Drawing.WorldToMinimap(Player.Instance.Position).To3D(), 500, System.Drawing.Color.Red);
+                //Drawing.DrawText(Drawing.WorldToMinimap(Player.Instance.Position),Color.Red, "Ermagherd", 30);
             }
         }
 
@@ -268,6 +270,15 @@ namespace UniversalGankAlerter
             Game.OnUpdate += Game_OnGameUpdate;
             OnEnterRange += ChampionInfo_OnEnterRange;
             Drawing.OnDraw += OnDraw;
+            Drawing.OnEndScene += Drawing_OnEndScene;
+        }
+
+        private void Drawing_OnEndScene(EventArgs args)
+        {
+            if (Program.Instance().DrawMinimapLines && !_hero.IsDead && Game.Time - _lineStart < Program.Instance().LineDuration)
+                Drawing.DrawLine(Drawing.WorldToMinimap(ObjectManager.Player.Position), Drawing.WorldToMinimap(_hero.Position), 2, _ally ? Color.FromArgb(125, 0, 255, 0) : Color.FromArgb(125, 255, 0, 0));
+
+
         }
 
         private void OnDraw(EventArgs args)
@@ -290,8 +301,6 @@ namespace UniversalGankAlerter
                 Drawing.DrawLine(Drawing.WorldToScreen(Player.Instance.Position), Drawing.WorldToScreen(_hero.Position), _lineWidth, _ally ? Color.FromArgb(125, 0, 255, 0) : Color.FromArgb(125, 255, 0, 0));
 
 
-            if (Program.Instance().DrawMinimapLines && !_hero.IsDead && Game.Time - _lineStart < Program.Instance().LineDuration)
-                Drawing.DrawLine(Drawing.WorldToMinimap(ObjectManager.Player.Position), Drawing.WorldToMinimap(_hero.Position), 2, _ally ? Color.FromArgb(125, 0, 255, 0) : Color.FromArgb(125, 255, 0, 0));
 
             Color c = _ally ? Color.FromArgb(125, 0, 255, 0) : Color.FromArgb(125, 255, 0, 0);
             if (!_hero.IsDead && Game.Time - _lineStart < Program.Instance().LineDuration &&
