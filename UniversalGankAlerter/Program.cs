@@ -277,29 +277,32 @@ namespace UniversalGankAlerter
         {
             if (Program.Instance().DrawMinimapLines && !_hero.IsDead && Game.Time - _lineStart < Program.Instance().LineDuration)
                 Drawing.DrawLine(Drawing.WorldToMinimap(ObjectManager.Player.Position), Drawing.WorldToMinimap(_hero.Position), 2, _ally ? Color.FromArgb(125, 0, 255, 0) : Color.FromArgb(125, 255, 0, 0));
-
-
         }
 
         private void OnDraw(EventArgs args)
         {
             //Chat.Print("gt here" + _hero.Name);
-          /*  Text txt = new Text(_hero.ChampionName, SystemFonts.DefaultFont);
-            txt.Color = _ally
-                    ? Color.FromArgb(255, 205, 255, 205)
-                    : Color.FromArgb(255, 255, 205, 205);
-            float dist = _hero.Distance(ObjectManager.Player.Position);
-            if (Program.Instance().ShowChampionNames && !_hero.IsDead &&
-                           Game.Time - _lineStart < Program.Instance().LineDuration &&
-                           !_hero.IsVisible &&
-                           dist < Program.Instance().Radius && dist > 300 + textoffset)
-                Drawing.DrawText(Drawing.WorldToScreen(Player.Instance.ServerPosition.To2D().Extend(_hero, 300f + textoffset).To3D()), txt.Color, txt.TextValue, 20);
+            try
+            {
+                string txt = _hero.ChampionName;
+                Color color = _ally
+                        ? Color.FromArgb(255, 205, 255, 205)
+                        : Color.FromArgb(255, 255, 205, 205);
+                float dist = _hero.Distance(ObjectManager.Player.Position);
+                if (Program.Instance().ShowChampionNames && !_hero.IsDead &&
+                               Game.Time - _lineStart < Program.Instance().LineDuration &&
+                              // !_hero.IsVisible &&
+                               dist < Program.Instance().Radius && dist > 300 + textoffset)
+                    Drawing.DrawText(Drawing.WorldToScreen(Player.Instance.ServerPosition.To2D().Extend(_hero, 300f + textoffset).To3D()), color, txt, 40);
 
-            */
-            if (!_hero.IsDead && Game.Time - _lineStart < Program.Instance().LineDuration &&
-                   _hero.Distance(ObjectManager.Player.Position) < (Program.Instance().Radius + 1000))
-                Drawing.DrawLine(Drawing.WorldToScreen(Player.Instance.Position), Drawing.WorldToScreen(_hero.Position), _lineWidth, _ally ? Color.FromArgb(125, 0, 255, 0) : Color.FromArgb(125, 255, 0, 0));
-
+                if (!_hero.IsDead && Game.Time - _lineStart < Program.Instance().LineDuration &&
+                       _hero.Distance(ObjectManager.Player.Position) < (Program.Instance().Radius + 1000))
+                    Drawing.DrawLine(Drawing.WorldToScreen(Player.Instance.Position), Drawing.WorldToScreen(_hero.Position), _lineWidth, _ally ? Color.FromArgb(125, 0, 255, 0) : Color.FromArgb(125, 255, 0, 0));
+            } catch (Exception e)
+            {
+                Chat.Print("Exception");
+                Console.WriteLine(e.StackTrace);
+            }
 
 
             Color c = _ally ? Color.FromArgb(125, 0, 255, 0) : Color.FromArgb(125, 255, 0, 0);
